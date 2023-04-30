@@ -1,3 +1,4 @@
+const router = require('express').Router();
 //get all users
 
 //get one user by id
