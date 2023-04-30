@@ -2,50 +2,43 @@ const { Schema, model } = require('mongoose');
 
 // Schema to create User model
 // mongoose.SchemaTypes.String.set('trim', true);
-const userSchema = new Schema(
+const thoughtSchema = new Schema(
   {
+    thoughtText: {
+        type: String,
+        required: 'You need to leave a thought', 
+        minLength: 1,
+        maxLength: 280,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        get: timestamp => dateFormat(timestamp),
+    },
     username: {
         type: String,
-        unique: true,
-        trimmed: true, 
-        required: true 
-    },
-    email: {
-      type: String,
-      unique: true,
-      required: true,
-      validate: [validateEmail, 'Please fill a valid email address'],
-      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
-    },
-    thoughts: [
-      {type: Schema.Types.ObjectId,
-        ref: "Thought",
-      }
-    ],
-    friends: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    }
+        required: true,
+      },
+    reactions: [reactionSchema]
   },
   {
     // Mongoose supports two Schema options to transform Objects after querying MongoDb: toJSON and toObject.
     // Here we are indicating that we want virtuals to be included with our response, overriding the default behavior
     toJSON: {
-      virtuals: true,
+      getters: true,
     },
     id: false,
   }
 );
 
-// Create a virtual property `friendCount` that gets the amount of friends per user
-userSchema
-  .virtual('friendCount')
+thoughtSchema
+  .virtual('reactionCount')
   // gets users in friends list
   .get(function () {
-    return this.friends.length
+    return this.reactions.length
   });
 
 // Initialize our User model
-const User = model('User', userSchema);
+const Thought = model('Thought', thoughtSchema);
 
-module.exports = User;
+module.exports = Thought;
