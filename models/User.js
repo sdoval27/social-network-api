@@ -37,22 +37,15 @@ const userSchema = new Schema(
   }
 );
 
-// Create a virtual property `commentCount` that gets the amount of comments per user
+// Create a virtual property `friendCount` that gets the amount of friends per user
 userSchema
-  .virtual('fullName')
-  // Getter
+  .virtual('friendCount')
+  // gets users in friends list
   .get(function () {
-    return `${this.username} ${this.last}`;
-  })
-  // Setter to set the first and last name
-  .set(function (v) {
-    const first = v.split(' ')[0];
-    const last = v.split(' ')[1];
-    this.set({ first, last });
-    
+    return this.friends.length
   });
 
 // Initialize our User model
-const User = model('user', userSchema);
+const User = model('User', userSchema);
 
 module.exports = User;
