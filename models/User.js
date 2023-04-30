@@ -10,8 +10,22 @@ const userSchema = new Schema(
         trimmed: true, 
         required: true 
     },
-    last: String,  
-    age: Number,
+    email: {
+      type: String,
+      unique: true,
+      required: true,
+      validate: [validateEmail, 'Please fill a valid email address'],
+      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+    },
+    thoughts: [
+      {type: Schema.Types.ObjectId,
+        ref: "Thought",
+      }
+    ],
+    friends: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    }
   },
   {
     // Mongoose supports two Schema options to transform Objects after querying MongoDb: toJSON and toObject.
