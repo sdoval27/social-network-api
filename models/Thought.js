@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
+const reactionSchema = require('./Reaction');
 
-// Schema to create User model
+// Schema to create Thought model
 // mongoose.SchemaTypes.String.set('trim', true);
 const thoughtSchema = new Schema(
   {
@@ -26,6 +27,7 @@ const thoughtSchema = new Schema(
     // Here we are indicating that we want virtuals to be included with our response, overriding the default behavior
     toJSON: {
       getters: true,
+      virtuals: true,
     },
     id: false,
   }

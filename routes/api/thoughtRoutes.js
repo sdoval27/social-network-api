@@ -8,7 +8,7 @@ const {
   createThought,
   updateThought,
   deleteThought,
-} = require('../../controllers/courseController.js');
+} = require('../../controllers/thoughtController.js');
 
 // /api/courses
 //GET to get all thoughts
@@ -21,9 +21,15 @@ router.route('/').get(getThoughts).post(createThought);
 //PUT to update a thought by its _id
 //DELETE to remove a thought by its _id
 router
-  .route('/:courseId')
+  .route('/:thoughtId')
   .get( getSingleThought)
   .put(updateThought)
   .delete(deleteThought);
+
+// /api/students/:studentId/assignments
+router.route('/:thoughtId/reactions').post(addReaction);
+
+// /api/students/:studentId/assignments/:assignmentId
+router.route('/:thoughtId/reactions/:reactionId').delete(removeReaction);
 
 module.exports = router;
