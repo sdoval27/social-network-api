@@ -95,7 +95,10 @@ module.exports = {
     },
     async addFriend(req, res) {
       try {
-        const user = await User.findOneAndUpdate({ _id: req.params.userId }, { $addToSet: { friends: req.params.friendId } }, { new: true } );
+        const user = await User.findOneAndUpdate(
+          { _id: req.params.userId }, 
+          { $addToSet: { friends: req.params.friendId } }, 
+          { new: true } );
 
         if (!user) {
           return res.status(404).json({ message: 'no user matches this id :(' });
@@ -103,6 +106,23 @@ module.exports = {
 
         res.json(user);
       } catch (err) {
+        res.status(500).json(err);
+      }
+    },
+
+    async removeFriend(req, res) {
+      try {
+        const user = await User.findOneAndUpdate(
+          { _id: req.params.userId},
+          { $pull: { friends: req.params.friendId} },
+          { runValidators: true, new: true});
+
+        if (!user) {
+          return res.status(404).json({ message: 'no user matches this id :(' });
+        }
+
+        res.json(user);
+      }catch (err) {
         res.status(500).json(err);
       }
     },
