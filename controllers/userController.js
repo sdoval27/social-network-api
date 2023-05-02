@@ -115,7 +115,7 @@ module.exports = {
         const user = await User.findOneAndUpdate(
           { _id: req.params.userId},
           { $pull: { friends: req.params.friendId} },
-          { runValidators: true, new: true});
+          {new: true});
 
         if (!user) {
           return res.status(404).json({ message: 'no user matches this id :(' });
@@ -128,3 +128,4 @@ module.exports = {
     },
 };
   
+module.exports = userController;
